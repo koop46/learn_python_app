@@ -269,7 +269,7 @@ let exercises = {
     }
 };
 
-// Fetch user progress from API
+// Fetch user progress from API and set default exercise
 async function fetchProgress() {
     let retries = 3;
     while (retries > 0) {
@@ -290,6 +290,42 @@ async function fetchProgress() {
                     subcategory.classList.remove('completed');
                 }
             });
+
+            // Determine the default exercise to display
+            let defaultExerciseId;
+            if (completedChallenges.size === 0) {
+                defaultExerciseId = "1"; // No exercises completed
+            } else if (completedChallenges.size === totalChallenges) {
+                defaultExerciseId = "1"; // All exercises completed
+            } else {
+                const lastCompletedId = Math.max(...Array.from(completedChallenges).map(id => parseInt(id)));
+                defaultExerciseId = String(lastCompletedId + 1);
+                if (!exercises[defaultExerciseId]) {
+                    defaultExerciseId = "1";
+                }
+            }
+
+            // Load the default exercise
+            const defaultExercise = exercises[defaultExerciseId];
+            if (defaultExercise) {
+                document.getElementById('problem').innerText = defaultExercise.description;
+                editor.setValue(defaultExercise.starterCode);
+                const defaultSubcategory = document.querySelector(`.subcategory[data-id="${defaultExerciseId}"]`);
+                if (defaultSubcategory) {
+                    document.querySelectorAll('.subcategory').forEach(item => item.classList.remove('active'));
+                    defaultSubcategory.classList.add('active');
+                    console.log(`Default exercise set to ${defaultExerciseId}:`, defaultExercise);
+                }
+            }
+
+            // Ensure visibility state
+            document.querySelector('.landing-page').classList.add('hidden');
+            document.querySelector('.app-container').classList.add('visible');
+            console.log('Visibility after fetchProgress:', {
+                landing: document.querySelector('.landing-page').classList.contains('hidden'),
+                app: document.querySelector('.app-container').classList.contains('visible')
+            });
+
             return; // Success, exit loop
         } catch (error) {
             console.error('Error fetching progress:', error.message);
@@ -297,7 +333,7 @@ async function fetchProgress() {
             if (retries === 0) {
                 alert('Failed to load progress after multiple attempts. Check your connection or API status.');
             } else {
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
         }
     }
@@ -355,7 +391,6 @@ document.querySelectorAll('.subcategory').forEach(subcategory => {
             document.getElementById('problem').innerText = exercise.description;
             editor.setValue(exercise.starterCode);
             console.log(`Loaded exercise ${exerciseId}:`, exercise);
-            // Restore completed status from API data
             if (completedChallenges.has(exerciseId)) {
                 this.classList.add('completed');
                 console.log(`Restored completed status for exercise ${exerciseId}`);
@@ -371,8 +406,8 @@ document.querySelectorAll('.subcategory').forEach(subcategory => {
 });
 
 // Run code with Pyodide and verify with API
-
 async function runCode() {
+    console.log('runCode triggered'); // Debug log
     if (!pyodide) await initializePyodide();
     const code = editor.getValue();
     const activeSubcategory = document.querySelector('.subcategory.active');
@@ -417,7 +452,6 @@ except (IndexError, NameError, SyntaxError, TypeError):
         let userResult = pyodide.globals.get('result') || '';
         console.log('User result:', userResult);
 
-        // Submit to API and verify completion
         const passedLocally = userResult === test.expected;
         console.log('Passed locally:', passedLocally, 'Expected:', test.expected);
 
@@ -425,8 +459,8 @@ except (IndexError, NameError, SyntaxError, TypeError):
         console.log('API verified:', apiVerified);
 
         if (apiVerified) {
-            completedChallenges.add(exerciseId); // Add to local set immediately
-            activeSubcategory.classList.add('completed'); // Apply checkmark immediately
+            completedChallenges.add(exerciseId);
+            activeSubcategory.classList.add('completed');
             updateProgress();
             resultDiv.classList.add('success-animation');
             setTimeout(() => resultDiv.classList.remove('success-animation'), 1000);
@@ -435,8 +469,35 @@ except (IndexError, NameError, SyntaxError, TypeError):
                 Input: "${test.input}", Expected: "${test.expected}", Got: "${userResult}"<br>
                 Challenge completed: ${activeSubcategory.textContent.trim()}
             `;
-            // Refresh progress to ensure UI syncs with API
-            await fetchProgress(); // This ensures any discrepancies are resolved
+            // Load the next exercise
+            let nextExerciseId;
+            if (completedChallenges.size === totalChallenges) {
+                nextExerciseId = "1"; // All completed, go back to first
+            } else {
+                const lastCompletedId = Math.max(...Array.from(completedChallenges).map(id => parseInt(id)));
+                nextExerciseId = String(lastCompletedId + 1);
+                if (!exercises[nextExerciseId]) {
+                    nextExerciseId = "1";
+                }
+            }
+            const nextExercise = exercises[nextExerciseId];
+            if (nextExercise) {
+                document.getElementById('problem').innerText = nextExercise.description;
+                editor.setValue(nextExercise.starterCode);
+                const nextSubcategory = document.querySelector(`.subcategory[data-id="${nextExerciseId}"]`);
+                if (nextSubcategory) {
+                    document.querySelectorAll('.subcategory').forEach(item => item.classList.remove('active'));
+                    nextSubcategory.classList.add('active');
+                    console.log(`Next exercise set to ${nextExerciseId}:`, nextExercise);
+                }
+            }
+            // Ensure visibility persists
+            document.querySelector('.landing-page').classList.add('hidden');
+            document.querySelector('.app-container').classList.add('visible');
+            console.log('Visibility after completion:', {
+                landing: document.querySelector('.landing-page').classList.contains('hidden'),
+                app: document.querySelector('.app-container').classList.contains('visible')
+            });
         } else {
             resultDiv.innerHTML = `
                 <span class="fail">✗ Failed!</span> Test case failed or not verified by server:<br>
@@ -450,12 +511,15 @@ except (IndexError, NameError, SyntaxError, TypeError):
     }
 }
 
-// Initialize progress and fetch from API on page load
-document.addEventListener('DOMContentLoaded', () => {
-    fetchProgress();
+// Handle landing page to app transition
+document.getElementById('start-coding').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('.landing-page').classList.add('hidden');
+    document.querySelector('.app-container').classList.add('visible');
+    fetchProgress(); // Load progress and set default exercise
 });
 
-// Load Pyodide on page load
+// Initialize Pyodide on page load
 initializePyodide();
 
 // Ensure runCode is globally available

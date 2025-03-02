@@ -12,6 +12,62 @@
             background-color: #121212;
             color: #f0f0f0;
             display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Landing Page Styles */
+        .landing-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #1e1e1e;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .landing-page.hidden {
+            display: none;
+        }
+
+        .landing-page h1 {
+            color: #ff5500;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .landing-page p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        /* Style for the "Start Coding" button */
+        .landing-page a#start-coding {
+            background-color: #ff5500;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .landing-page a#start-coding:hover {
+            background-color: #ff7700;
+        }
+
+        /* App Container (Sidebar + Main Content) */
+        .app-container {
+            display: none; /* Hidden by default */
+            flex-direction: row;
+            height: 100vh;
+        }
+
+        .app-container.visible {
+            display: flex;
         }
 
         /* Sidebar Styles */
@@ -24,10 +80,38 @@
             overflow-y: auto;
         }
 
+        /* Container for centering the image */
+        .sidebar .image-container {
+            display: flex;
+            justify-content: center; /* Center the image horizontally */
+            margin-bottom: 0px; /* Space below the image */
+            
+        }
+
+        /* Image-specific styles for sidebar */
+        .sidebar img.sidebar-image {
+            background-color: #1e1e1e; /* Match sidebar background */
+            width: 100px; /* Reduced by 50% from 200px */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 0px;
+            padding: 0px;
+            transition: transform 0.2s; /* Optional: Add hover effect */
+        }
+
+        .sidebar img.sidebar-image:hover {
+            transform: scale(1.05); /* Optional: Slight zoom on hover */
+        }
+
+        .sidebar a.image-link {
+            text-decoration: none; /* Remove underline */
+            background-color: transparent; /* No background */
+        }
+
         .sidebar h2 {
             color: #ff5500;
             padding: 0 20px;
-            margin-bottom: 10px;
+            margin-bottom: 0px;
+            margin-top: 0px;
         }
 
         .sidebar ul {
@@ -218,148 +302,129 @@
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h2>Python Challenges</h2>
-        
-        <!-- Overall progress -->
-        <div class="progress-container">
-            <span>Progress:</span>
-            <div class="progress-bar">
-                <div class="progress-fill" id="overall-progress"></div>
-            </div>
-            <span id="progress-percent">0%</span>
-        </div>
-        
-        <!-- Variables, Loops, Functions -->
-        <div class="category active">Variables, Loops, Functions</div>
-        <div class="subcategories">
-            <div class="subcategory" data-id="1">Hello, world!</div>
-            <div class="subcategory" data-id="2">discount</div>
-            <div class="subcategory" data-id="3">celsius2fahrenheit</div>
-            <div class="subcategory" data-id="4">factorial</div>
-            <div class="subcategory" data-id="5">harmonic sum</div>
-        </div>
-        
-        <!-- Conditions -->
-        <div class="category collapsed">Conditions</div>
-        <div class="subcategories hidden">
-            <div class="subcategory" data-id="6">going_out</div>
-            <div class="subcategory" data-id="7">adult</div>
-            <div class="subcategory" data-id="8">near_number</div>
-            <div class="subcategory" data-id="9">grades 5</div>
-            <div class="subcategory" data-id="10">grades 100</div>
-        </div>
-        
-        <!-- Floating Point -->
-        <div class="category collapsed">Floating Point</div>
-        <div class="subcategories hidden">
-            <div class="subcategory" data-id="11">cylinder</div>
-            <div class="subcategory" data-id="12">basel</div>
-            <div class="subcategory" data-id="13">linear extrapolation</div>
-        </div>
-        
-        <!-- Block 1 Checkpoint -->
-        <div class="category collapsed">Block 1 Checkpoint</div>
-        <div class="subcategories hidden">
-            <div class="subcategory" data-id="14">Logistic Map</div>
-        </div>
-        
-        <!-- Strings and Lists -->
-        <div class="category collapsed">Strings and Lists</div>
-        <div class="subcategories hidden">
-            <div class="subcategory" data-id="15">greeting</div>
-            <div class="subcategory" data-id="16">tags</div>
-            <div class="subcategory" data-id="17">numerology</div>
-            <div class="subcategory" data-id="18">same_ends</div>
-            <div class="subcategory" data-id="19">swap</div>
-            <div class="subcategory" data-id="20">skip</div>
-            <div class="subcategory" data-id="21">acronym</div>
-            <div class="subcategory" data-id="22">caesar</div>
-        </div>
-        
-        <!-- Dictionaries -->
-        <div class="category collapsed">Dictionaries</div>
-        <div class="subcategories hidden">
-            <div class="subcategory" data-id="23">kcals</div>
-            <div class="subcategory" data-id="24">word_index</div>
-        </div>
-        
-        <!-- Files -->
-        <div class="category collapsed">Files</div>
-        <div class="subcategories hidden">
-            <div class="subcategory" data-id="25">filesum</div>
-            <div class="subcategory" data-id="26">passwords</div>
-        </div>
-        
-        <!-- Block 2 Checkpoint -->
-        <div class="category collapsed">Block 2 Checkpoint</div>
-        <div class="subcategories hidden">
-            <div class="subcategory" data-id="27">Invisible Ink</div>
-        </div>
-        
-        <!-- Objects -->
-        <div class="category collapsed">Objects</div>
-        <div class="subcategories hidden">
-            <div class="subcategory" data-id="28">WebLogin</div>
-            <div class="subcategory exam" data-id="29">DiceStatsexam</div>
-            <div class="subcategory exam" data-id="30">TrainSeatsexam</div>
-            <div class="subcategory exam" data-id="31">Applicationexam</div>
-            <div class="subcategory" data-id="32">Fifteen</div>
-        </div>
-
-        <!-- Defining operators -->
-        <div class="category collapsed">Defining operators</div>
-        <div class="subcategories hidden">
-
-            <div class="subcategory" data-id="33">A Class of Rationals</div>
-        </div>
-
-                <!-- Inheritance -->
-        <div class="category collapsed">Inheritance</div>
-        <div class="subcategories hidden">
-
-            <div class="subcategory" data-id="34">Counters</div>
-        </div>
-        
-        <!-- Recursion -->
-        <div class="category collapsed">Recursion</div>
-        <div class="subcategories hidden">
-            <div class="subcategory" data-id="35">combinations</div>
-            <div class="subcategory" data-id="36">gcd</div>
-            <div class="subcategory" data-id="37">binarySearch</div>
-        </div>
-        
-        <!-- Exam Preparation 1 -->
-        <div class="category collapsed">Exam Preparation 1</div>
-        <div class="subcategories hidden">
-            <div class="subcategory exam" data-id="38">movieTicketsexam</div>
-            <div class="subcategory exam" data-id="39">pepLineLengthexam</div>
-            <div class="subcategory exam" data-id="40">Cardexam</div>
-        </div>
-        
-        <!-- Exam Preparation 2 -->
-        <div class="category collapsed">Exam Preparation 2</div>
-        <div class="subcategories hidden">
-            <div class="subcategory exam" data-id="41">pandemic_rulesexam</div>
-            <div class="subcategory exam" data-id="42">div9exam</div>
-            <div class="subcategory exam" data-id="43">StatSetexam</div>
-        </div>
-        
-        <!-- Exam Preparation 3 -->
-        <div class="category collapsed">Exam Preparation 3</div>
-        <div class="subcategories hidden">
-            <div class="subcategory exam" data-id="44">calculate_loanexam</div>
-            <div class="subcategory exam" data-id="45">code_wordsexam</div>
-            <div class="subcategory exam" data-id="46">Robotexam</div>
-        </div>
+    <!-- Landing Page -->
+    <div class="landing-page">
+        <h1>Welcome to Python Self-Mastery</h1>
+        <p>Embark on a journey to master Python with interactive challenges designed to build your coding skills from the ground up!</p>
+        <a href="#" id="start-coding">Start Coding</a>
     </div>
-    
-    <div class="main-content">
-        <h1>Python Self-Mastery</h1>
-        <div id="problem">Select an exercise to start coding...</div>
-        <div id="editor"></div>
-        <button onclick="runCode()">Run Code</button>
-        <div id="result" class="result">Result: Run your code to see results</div>
+
+    <!-- App Container (Hidden Initially) -->
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="image-container">
+                <a href="https://github.com/M10-AI" target="_blank" class="image-link">
+                    <img src="m1_cut_logo.png" alt="Python Journey Image" class="sidebar-image">
+                </a>
+            </div>
+            <h2>Python Challenges</h2>
+            <div class="progress-container">
+                <span>Progress:</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="overall-progress"></div>
+                </div>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="category active">Variables, Loops, Functions</div>
+            <div class="subcategories">
+                <div class="subcategory" data-id="1">Hello, world!</div>
+                <div class="subcategory" data-id="2">discount</div>
+                <div class="subcategory" data-id="3">celsius2fahrenheit</div>
+                <div class="subcategory" data-id="4">factorial</div>
+                <div class="subcategory" data-id="5">harmonic sum</div>
+            </div>
+            <div class="category collapsed">Conditions</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="6">going_out</div>
+                <div class="subcategory" data-id="7">adult</div>
+                <div class="subcategory" data-id="8">near_number</div>
+                <div class="subcategory" data-id="9">grades 5</div>
+                <div class="subcategory" data-id="10">grades 100</div>
+            </div>
+            <div class="category collapsed">Floating Point</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="11">cylinder</div>
+                <div class="subcategory" data-id="12">basel</div>
+                <div class="subcategory" data-id="13">linear extrapolation</div>
+            </div>
+            <div class="category collapsed">Block 1 Checkpoint</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="14">Logistic Map</div>
+            </div>
+            <div class="category collapsed">Strings and Lists</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="15">greeting</div>
+                <div class="subcategory" data-id="16">tags</div>
+                <div class="subcategory" data-id="17">numerology</div>
+                <div class="subcategory" data-id="18">same_ends</div>
+                <div class="subcategory" data-id="19">swap</div>
+                <div class="subcategory" data-id="20">skip</div>
+                <div class="subcategory" data-id="21">acronym</div>
+                <div class="subcategory" data-id="22">caesar</div>
+            </div>
+            <div class="category collapsed">Dictionaries</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="23">kcals</div>
+                <div class="subcategory" data-id="24">word_index</div>
+            </div>
+            <div class="category collapsed">Files</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="25">filesum</div>
+                <div class="subcategory" data-id="26">passwords</div>
+            </div>
+            <div class="category collapsed">Block 2 Checkpoint</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="27">Invisible Ink</div>
+            </div>
+            <div class="category collapsed">Objects</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="28">WebLogin</div>
+                <div class="subcategory exam" data-id="29">DiceStatsexam</div>
+                <div class="subcategory exam" data-id="30">TrainSeatsexam</div>
+                <div class="subcategory exam" data-id="31">Applicationexam</div>
+                <div class="subcategory" data-id="32">Fifteen</div>
+            </div>
+            <div class="category collapsed">Defining operators</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="33">A Class of Rationals</div>
+            </div>
+            <div class="category collapsed">Inheritance</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="34">Counters</div>
+            </div>
+            <div class="category collapsed">Recursion</div>
+            <div class="subcategories hidden">
+                <div class="subcategory" data-id="35">combinations</div>
+                <div class="subcategory" data-id="36">gcd</div>
+                <div class="subcategory" data-id="37">binarySearch</div>
+            </div>
+            <div class="category collapsed">Exam Preparation 1</div>
+            <div class="subcategories hidden">
+                <div class="subcategory exam" data-id="38">movieTicketsexam</div>
+                <div class="subcategory exam" data-id="39">pepLineLengthexam</div>
+                <div class="subcategory exam" data-id="40">Cardexam</div>
+            </div>
+            <div class="category collapsed">Exam Preparation 2</div>
+            <div class="subcategories hidden">
+                <div class="subcategory exam" data-id="41">pandemic_rulesexam</div>
+                <div class="subcategory exam" data-id="42">div9exam</div>
+                <div class="subcategory exam" data-id="43">StatSetexam</div>
+            </div>
+            <div class="category collapsed">Exam Preparation 3</div>
+            <div class="subcategories hidden">
+                <div class="subcategory exam" data-id="44">calculate_loanexam</div>
+                <div class="subcategory exam" data-id="45">code_wordsexam</div>
+                <div class="subcategory exam" data-id="46">Robotexam</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <h1>Python Self-Mastery</h1>
+            <div id="problem">Select an exercise to start coding...</div>
+            <div id="editor"></div>
+            <button onclick="runCode()">Run Code</button>
+            <div id="result" class="result">Result: Run your code to see results</div>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/codemirror.min.js"></script>

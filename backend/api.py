@@ -1,13 +1,13 @@
 from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker, declarative_base, relationship
+from sqlalchemy.orm import Session, sessionmaker, declarative_base
 from fastapi.middleware.cors import CORSMiddleware
 from db_schema import UserProgress
 import uvicorn
 
 # Database setup
-SQLALCHEMY_DATABASE_URL = "sqlite:///python_course.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///backend/python_course.db" #change when deploying!!!
 engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -42,13 +42,27 @@ def get_db():
 
 app = FastAPI()
 
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5500", "http://127.0.0.1:5500"],  # Add your frontend URL
+    allow_origins=[
+        "*"],
+    #     "http://frontend:80",
+    #     "http://localhost",
+    #     "http://localhost:80",
+    #     "http://127.0.0.1",
+    #     "http://127.0.0.1:80",
+    #     "http://127.0.0.1",
+    #     "http://127.0.0.1:5500",
+    #     "http://localhost",
+    #     "http://localhost:5500"
+    # ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # API Endpoints
 @app.get("/")

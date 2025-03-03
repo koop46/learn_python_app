@@ -1,0 +1,31 @@
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.back
+
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.front
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    environment:
+      - API_BASE_URL=http://backend:8000
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  backend-db:

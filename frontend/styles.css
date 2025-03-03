@@ -1,0 +1,366 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Landing Page Styles */
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1e1e1e;
+    text-align: center;
+    padding: 20px;
+}
+
+.landing-page.hidden {
+    display: none;
+}
+
+.landing-page h1 {
+    color: #ff5500;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.landing-page p {
+    font-size: 1.2em;
+    max-width: 600px;
+    margin-bottom: 30px;
+}
+
+/* Style for the "Start Coding" button */
+.landing-page a#start-coding {
+    background-color: #ff5500;
+    color: white;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.landing-page a#start-coding:hover {
+    background-color: #ff7700;
+}
+
+/* App Container (Sidebar + Main Content) */
+.app-container {
+    display: none; /* Hidden by default */
+    flex-direction: row;
+    height: 100vh;
+}
+
+.app-container.visible {
+    display: flex;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 280px;
+    background-color: #1e1e1e;
+    height: 100vh;
+    padding: 20px 0;
+    border-right: 2px solid #ff5500;
+    overflow-y: auto;
+}
+
+/* Container for centering the image */
+.sidebar .image-container {
+    display: flex;
+    justify-content: center; /* Center the image horizontally */
+    margin-bottom: 0px; /* Space below the image */
+}
+
+/* Image-specific styles for sidebar */
+.sidebar img.sidebar-image {
+    background-color: #1e1e1e; /* Match sidebar background */
+    width: 100px; /* Reduced by 50% from 200px */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 0px;
+    padding: 0px;
+    transition: transform 0.2s; /* Optional: Add hover effect */
+}
+
+.sidebar img.sidebar-image:hover {
+    transform: scale(1.05); /* Optional: Slight zoom on hover */
+}
+
+.sidebar a.image-link {
+    text-decoration: none; /* Remove underline */
+    background-color: transparent; /* No background */
+}
+
+.sidebar h2 {
+    color: #ff5500;
+    padding: 0 20px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+}
+
+.sidebar .category {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar .category:after {
+    content: '▼';
+    font-size: 10px;
+    transition: transform 0.3s;
+}
+
+.sidebar .category.collapsed:after {
+    transform: rotate(-90deg);
+}
+
+.sidebar .category:hover {
+    background-color: #333;
+}
+
+.sidebar .category.active {
+    background-color: #2a2a2a;
+    border-left: 4px solid #ff7700;
+}
+
+/* Subcategories */
+.sidebar .subcategories {
+    margin-left: 20px;
+    overflow: hidden;
+    max-height: 1000px;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.sidebar .subcategories.hidden {
+    max-height: 0;
+}
+
+.sidebar .subcategory {
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar .subcategory:hover {
+    background-color: #333;
+}
+
+.sidebar .subcategory.active {
+    background-color: #2a2a2a;
+    border-left: 2px solid #ff7700;
+    color: #ff7700;
+}
+
+/* Completion checkmark */
+.subcategory.completed::after {
+    content: "✓ ";
+    color: green;
+    font-weight: bold;
+}
+
+/* Completion progress */
+.progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 20px 15px 20px;
+}
+
+.progress-bar {
+    flex-grow: 1;
+    height: 6px;
+    background-color: #333;
+    border-radius: 3px;
+    margin: 0 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #4caf50;
+    width: 0%;
+    transition: width 0.5s;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+h1 {
+    color: #ff5500;
+    margin-bottom: 30px;
+}
+
+/* Problem description */
+#problem {
+    background-color: #2a2a2a;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border-left: 4px solid #ff5500;
+}
+
+/* New container for code editor and result */
+.code-result-container {
+    display: flex;
+    gap: 20px; /* Adds space between the editor and result boxes */
+    margin-bottom: 20px;
+}
+
+/* Editor customizations */
+#editor {
+    flex: 3; /* Takes 3 parts of the available space */
+    border-radius: 5px;
+    font-family: 'Consolas', monospace;
+    font-size: 15px;
+}
+
+#editor .CodeMirror {
+    height: 300px; /* Ensure the CodeMirror height is preserved */
+}
+
+/* Result area */
+.result {
+    flex: 1; /* Takes 1 part of the available space */
+    margin-top: 0; /* Remove default margin to align with editor */
+    padding: 15px;
+    background: #2a2a2a;
+    border-radius: 5px;
+    border-left: 4px solid #ff5500;
+    min-height: 300px; /* Match the height of the editor for consistency */
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+    justify-content: flex-start; /* Align content to the top */
+}
+
+/* Style for individual messages within the result */
+.result > div {
+    margin-bottom: 10px; /* Space between multiple messages */
+}
+
+.result > div:last-child {
+    margin-bottom: 0; /* Remove margin from the last message */
+}
+
+/* Run button */
+button {
+    background-color: #ff5500;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 15px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #ff7700;
+}
+
+/* Success animation */
+@keyframes success-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.success-animation {
+    animation: success-pulse 1s 1;
+}
+
+/* Pass/fail styling */
+.pass {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.fail {
+    color: #f44336;
+    font-weight: bold;
+}
+
+/* Highlight exam subcategories */
+.subcategory.exam {
+    background-color: #2a2a2a;
+    border-left: 2px solid #ffaa33;
+    font-weight: bold;
+    color: #ffaa33;
+}
+
+.subcategory.exam:hover {
+    background-color: #333;
+}
+
+/* LLM Loading Indicator Styles */
+.llm-loading {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    border-left: 4px solid #ffaa33;
+    font-size: 0.9em;
+}
+
+.llm-spinner {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    border: 3px solid rgba(255, 85, 0, 0.3);
+    border-top: 3px solid #ff5500;
+    border-radius: 50%;
+    animation: llm-spin 1.5s linear infinite;
+}
+
+@keyframes llm-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Alternate loading indicator option - thinking dots */
+.llm-thinking {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+}
+
+.llm-thinking:after {
+    content: ".";
+    animation: llm-thinking 1.2s steps(3, end) infinite;
+    display: inline-block;
+    width: 1em;
+    text-align: left;
+}
+
+@keyframes llm-thinking {
+    0% { content: "."; }
+    33% { content: ".."; }
+    66% { content: "..."; }
+}

@@ -31,8 +31,8 @@
                 </div>
                 <span id="progress-percent">0%</span>
             </div>
-            <div class="category active">Variables, Loops, Functions</div>
-            <div class="subcategories">
+            <div class="category collapsed">Variables, Loops, Functions</div>
+            <div class="subcategories hidden">
                 <div class="subcategory" data-id="1">Hello, world!</div>
                 <div class="subcategory" data-id="2">discount</div>
                 <div class="subcategory" data-id="3">celsius2fahrenheit</div>
@@ -131,8 +131,11 @@
                 <div id="editor"></div>
                 <div id="result" class="result">Result: Run your code to see results</div>
             </div>
-            <button onclick="runCode()">Run Code</button>
-        </div>
+            <form id="code-form" onsubmit="return false;">
+                <!-- Editor and other elements -->
+                <button type="submit" id="run-button">Run Code</button>
+            </form>        
+            </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.63.1/mode/python/python.min.js"></script>

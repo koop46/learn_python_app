@@ -18,9 +18,9 @@ function updateProgress() {
 
 // Initialize CodeMirror editor with Monokai theme
 const editor = CodeMirror(document.getElementById('editor'), {
-    value: "# Select an exercise to start coding...",
+
     mode: 'python',
-    lineNumbers: true,
+    lineNumbers: false,
     theme: 'monokai',
     indentUnit: 4,
     tabSize: 4,
@@ -42,7 +42,7 @@ const client = axios.create({
     baseURL: 'https://chatapi.akash.network/api/v1',
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer xxxxxxxxxx' // Replace with your actual API key
+        'Authorization': 'Bearer sk-HahPwqddk0rUY9y_7CbC3g' // Replace with your actual API key
     }
 });
 
@@ -54,7 +54,7 @@ async function getLLMErrorMessage(exerciseId, code, input, expected, got) {
     resultDiv.innerHTML = `
         <div class="llm-loading">
             <div class="llm-spinner"></div>
-            <div>Generating helpful feedback...</div>
+            <div>Generating feedback...</div>
         </div>
         ${originalContent}
     `;
@@ -164,6 +164,9 @@ async function fetchProgress() {
                 landing: document.querySelector('.landing-page').classList.contains('hidden'),
                 app: document.querySelector('.app-container').classList.contains('visible')
             });
+
+            // Call setActiveCategory after progress is fetched
+            setActiveCategory();
 
             return; // Success, exit loop
         } catch (error) {
@@ -296,6 +299,8 @@ except (IndexError, NameError, SyntaxError, TypeError):
 
         const apiVerified = await submitCode(exerciseId, code, userResult);
         console.log('API verified:', apiVerified);
+        console.log('Last stop!!!!!!?????');
+
 
         if (apiVerified) {
             completedChallenges.add(exerciseId);
@@ -349,15 +354,61 @@ except (IndexError, NameError, SyntaxError, TypeError):
     }
 }
 
+function setActiveCategory() {
+    let categories = document.querySelectorAll('.category');
+    let subcategories = document.querySelectorAll('.subcategories');
+
+    categories.forEach(category => {
+        category.classList.add('collapsed');
+    });
+
+    subcategories.forEach(subcategory => {
+        subcategory.classList.add('hidden');
+    });
+
+    // Find the first category with an unfinished exercise
+    for (let category of categories) {
+        let subcats = category.nextElementSibling.querySelectorAll('.subcategory');
+        let hasUnfinished = Array.from(subcats).some(sub => !sub.classList.contains('completed'));
+
+        if (hasUnfinished) {
+            category.classList.remove('collapsed');
+            category.nextElementSibling.classList.remove('hidden');
+            category.classList.add('active');
+            break;
+        }
+    }
+}
+
+
+console.log("Starting from here")
 // Handle landing page to app transition
+document.getElementById('start-coding').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.querySelector('.landing-page').classList.add('hidden');
+    document.querySelector('.app-container').classList.add('visible');
+    fetchProgress(); // setActiveCategory is now called within fetchProgress
+});
+
+// Initialize Pyodide on page load
+initializePyodide();
+
+// Keep the start-coding handler (for landing page transition)
 document.getElementById('start-coding').addEventListener('click', (e) => {
     e.preventDefault();
     document.querySelector('.landing-page').classList.add('hidden');
     document.querySelector('.app-container').classList.add('visible');
     fetchProgress();
 });
-// Initialize Pyodide on page load
+
+// Add the form submit handler (for code execution)
+document.getElementById('code-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await runCode();
+});
+
+// Keep Pyodide initialization
 initializePyodide();
 
-// Ensure runCode is globally available
-window.runCode = runCode;
+// Keep global runCode availability if needed for HTML onclick attributes
+window.runCode = runCode; // Only if you have inline handlers like <button onclick="runCode()">
